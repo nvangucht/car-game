@@ -1,0 +1,66 @@
+// import Boot from './states/boot';
+// import Game from './states/game';
+// import Menu from './states/menu';
+// import Preloader from './states/preloader';
+// import Gameover from './states/gameover';
+
+
+// const game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'Go To Work!');
+// game.physics.startSystem(Phaser.Physics.P2JS);
+// game.state.add('boot', new Boot());
+// game.state.add('game', new Game());
+// game.state.add('menu', new Menu());
+// game.state.add('preloader', new Preloader());
+// game.state.add('gameover', new Gameover());
+
+// game.state.start('boot');
+
+
+var game = new Phaser.Game(1280, 839, Phaser.AUTO, 'Go To Work!', { preload: preload, create: create, update: update });
+
+function preload() {
+  game.load.spritesheet('map','assets/map.jpg');
+  game.load.spritesheet('car','assets/car.png');
+}
+
+var cursors;
+var velocity = 0;
+var car;
+
+function create() {
+  /*Enable Phyics Engine*/
+  game.physics.startSystem(Phaser.Physics.P2JS);
+  /*Adding Map*/
+  var map = game.add.sprite(0, 0, 'map');
+  /*Adding car*/
+  car = game.add.sprite(570, 100, 'car');
+  game.physics.p2.enable(car);
+  car.body.angle = 90;
+  cursors = game.input.keyboard.createCursorKeys();
+}
+
+
+
+var angleRotation = 0.01745;
+var maxSpeed = 400;
+function update() {
+  /*Update Velocity*/
+  if (cursors.up.isDown && velocity <= maxSpeed) {
+    velocity += 7;
+  }
+  else {
+    if (velocity >= 7) {
+      velocity -= 7;
+    }
+  }
+  /*Set X and Y Speed of Velocity*/
+  car.body.velocity.x = velocity * Math.cos((car.angle - 90) * angleRotation);
+  car.body.velocity.y = velocity * Math.sin((car.angle - 90) * angleRotation);
+  /*Rotation of Car*/
+  if (cursors.left.isDown)
+      car.body.angularVelocity = -5 * (velocity / 1000);
+  else if (cursors.right.isDown)
+      car.body.angularVelocity = 5 * (velocity / 1000);
+  else
+      car.body.angularVelocity = 0;
+}

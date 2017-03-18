@@ -1,0 +1,7 @@
+{
+  "generator-phaser": {
+    "projectName": "Go To Work!",
+    "esVersion": 6,
+    "gameFolder": "boilerplate"
+  }
+}
