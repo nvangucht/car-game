@@ -2,36 +2,74 @@ class Boot extends Phaser.State {
 
   constructor() {
     super();
+
+    var sprite,
+        bmd,
+        cursors,
+        velocity,
+        car,
+        angleRotation,
+        maxSpeed = 250;
   }
 
   preload() {
-    this.load.image('preloader', 'assets/preloader.gif');
-    this.game.load.spritesheet('map','assets/map.jpg');
     this.game.load.spritesheet('car','assets/car.png');
-    this.game.load.spritesheet('building','assets/building.png');
-    this.game.load.physics("collision","assets/collision.json");
   }
 
   create() {
-    this.game.input.maxPointers = 1;
 
-    //setup device scaling
-    if (this.game.device.desktop) {
-      this.game.scale.pageAlignHorizontally = true;
-    } else {
-      this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-      this.game.scale.minWidth =  480;
-      this.game.scale.minHeight = 260;
-      this.game.scale.maxWidth = 640;
-      this.game.scale.maxHeight = 480;
-      this.game.scale.forceOrientation(true);
-      this.game.scale.pageAlignHorizontally = true;
-      this.game.scale.setScreenSize(true);
+    this.velocity = 0;
+
+    this.angleRotation = 0.01745;
+    this.maxSpeed = 250;
+    //  Enable p2 physics
+    this.game.physics.startSystem(Phaser.Physics.P2JS);
+
+    this.game.stage.backgroundColor = '#124184';
+
+    this.bmd = this.game.add.bitmapData(800, 600);
+    this.bmd.context.fillStyle = '#ffffff';
+
+    var bg = this.game.add.sprite(0, 0, this.bmd);
+
+    this.game.physics.p2.gravity.y = -50;
+
+    this.sprite = this.game.add.sprite(32, 450, 'car');
+    this.car = this.game.add.sprite(100, 100, 'car');
+
+    this.game.physics.p2.enable(this.sprite);
+
+    this.sprite.body.fixedRotation = true;
+
+    this.game.physics.p2.enable(this.car);
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+
+  }
+
+  update() {
+    /*Update Velocity*/
+
+    this.car.body.gravity.y = -100;
+
+    if (this.cursors.up.isDown && this.velocity <= this.maxSpeed - 100) {
+      this.velocity += 7;
+    } else if (this.cursors.down.isDown && this.velocity <= this.maxSpeed) {
+      this.velocity -= 7;
     }
 
-    this.initGlobalVariables();
-
-    this.game.state.start('preloader');
+    // /*Set X and Y Speed of Velocity*/
+    this.car.body.velocity.x = this.velocity * Math.cos((this.car.angle - 90) * this.angleRotation);
+    this.car.body.velocity.y = this.velocity * Math.sin((this.car.angle - 90) * this.angleRotation);
+    // /*Rotation of Car*/
+    if (this.cursors.left.isDown) {
+        this.car.body.angularVelocity = -5 * (this.velocity / 1000);
+    }
+    else if (this.cursors.right.isDown) {
+        this.car.body.angularVelocity = 5 * (this.velocity / 1000);
+    }
+    else {
+        this.car.body.angularVelocity = 0;
+    }
   }
 
   initGlobalVariables(){
