@@ -4,12 +4,12 @@ class Boot extends Phaser.State {
     super();
 
     var sprite,
-        bmd,
         cursors,
         velocity,
         car,
         angleRotation,
-        maxSpeed = 250;
+        maxSpeed = 250,
+        group1;
   }
 
   preload() {
@@ -20,6 +20,11 @@ class Boot extends Phaser.State {
 
     this.velocity = 0;
 
+    this.group1 = this.game.add.group();
+
+    this.game.world.setBounds(0, 0, 2000, 2000);
+    this.game.camera.y = 200;
+
     this.angleRotation = 0.01745;
     this.maxSpeed = 250;
     //  Enable p2 physics
@@ -27,15 +32,12 @@ class Boot extends Phaser.State {
 
     this.game.stage.backgroundColor = '#124184';
 
-    this.bmd = this.game.add.bitmapData(800, 600);
-    this.bmd.context.fillStyle = '#ffffff';
-
-    var bg = this.game.add.sprite(0, 0, this.bmd);
-
     this.game.physics.p2.gravity.y = -50;
 
     this.sprite = this.game.add.sprite(32, 450, 'car');
-    this.car = this.game.add.sprite(100, 100, 'car');
+    this.car = this.game.add.sprite(100, 400, 'car');
+
+    this.group1.add(this.car);
 
     this.game.physics.p2.enable(this.sprite);
 
@@ -43,6 +45,8 @@ class Boot extends Phaser.State {
 
     this.game.physics.p2.enable(this.car);
     this.cursors = this.game.input.keyboard.createCursorKeys();
+
+    this.game.world.bringToTop(this.group1);
 
   }
 
@@ -57,9 +61,16 @@ class Boot extends Phaser.State {
       this.velocity -= 7;
     }
 
-    // /*Set X and Y Speed of Velocity*/
-    this.car.body.velocity.x = this.velocity * Math.cos((this.car.angle - 90) * this.angleRotation);
-    this.car.body.velocity.y = this.velocity * Math.sin((this.car.angle - 90) * this.angleRotation);
+    // if(this.sprite.body.y <= 50) {
+    //   this.sprite.kill();
+    //   console.log(this.sprite.body.y);
+    // } 
+
+    // if (this.car.body <= 300) {
+    //   this.car.body = 401;
+    // }
+
+
     // /*Rotation of Car*/
     if (this.cursors.left.isDown) {
         this.car.body.angularVelocity = -5 * (this.velocity / 1000);
@@ -70,7 +81,24 @@ class Boot extends Phaser.State {
     else {
         this.car.body.angularVelocity = 0;
     }
+
+    if (this.sprite.body.y <= 50) {
+      this.sprite.body.y = 600;
+      this.sprite.body.velocity.y = 10;
+    }
+
+    // /*Set X and Y Speed of Velocity*/
+    this.car.body.velocity.x = this.velocity * Math.cos((this.car.angle - 90) * this.angleRotation);
+    this.car.body.velocity.y = this.velocity * Math.sin((this.car.angle - 90) * this.angleRotation);
   }
+
+  render() {
+
+      this.game.debug.cameraInfo(this.game.camera, 32, 32);
+      // this.game.debug.cameraInfo(this.game.camera, 32, 32);
+
+  }
+
 
   initGlobalVariables(){
     this.game.global = {
