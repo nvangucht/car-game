@@ -16,43 +16,61 @@
 // game.state.start('boot');
 
 
-var game = new Phaser.Game(1280, 839, Phaser.AUTO, 'Go To Work!', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(1280, 800, Phaser.AUTO, 'Go To Work!', { preload: preload, create: create, update: update });
 
 function preload() {
-  game.load.spritesheet('map','assets/map.jpg');
+  // game.load.spritesheet('map','assets/map.jpg');
   game.load.spritesheet('car','assets/car.png');
 }
+
+var sprite;
+var bmd;
 
 var cursors;
 var velocity = 0;
 var car;
 
+var angleRotation = 0.01745;
+var maxSpeed = 250;
+
 function create() {
-  /*Enable Phyics Engine*/
-  game.physics.startSystem(Phaser.Physics.P2JS);
-  /*Adding Map*/
-  var map = game.add.sprite(0, 0, 'map');
-  /*Adding car*/
-  car = game.add.sprite(570, 100, 'car');
-  game.physics.p2.enable(car);
-  car.body.angle = 90;
-  cursors = game.input.keyboard.createCursorKeys();
+
+	//	Enable p2 physics
+	game.physics.startSystem(Phaser.Physics.P2JS);
+
+	game.stage.backgroundColor = '#124184';
+
+	bmd = game.add.bitmapData(800, 600);
+	bmd.context.fillStyle = '#ffffff';
+
+	var bg = game.add.sprite(0, 0, bmd);
+
+	game.physics.p2.gravity.y = -50;
+    // game.physics.p2.restitution = 0.8;
+
+	sprite = game.add.sprite(32, 450, 'car');
+	car = game.add.sprite(570, 700, 'car');
+
+	game.physics.p2.enable(sprite);
+
+	sprite.body.fixedRotation = true;
+
+	game.physics.p2.enable(car);
+	cursors = game.input.keyboard.createCursorKeys();
+
 }
 
-
-
-var angleRotation = 0.01745;
-var maxSpeed = 400;
 function update() {
   /*Update Velocity*/
-  if (cursors.up.isDown && velocity <= maxSpeed) {
+
+  car.body.gravity.y = -100;
+
+  if (cursors.up.isDown && velocity <= maxSpeed - 100) {
     velocity += 7;
+  } else if (cursors.down.isDown && velocity <= maxSpeed) {
+  	velocity -= 7;
   }
-  else {
-    if (velocity >= 7) {
-      velocity -= 7;
-    }
-  }
+
   /*Set X and Y Speed of Velocity*/
   car.body.velocity.x = velocity * Math.cos((car.angle - 90) * angleRotation);
   car.body.velocity.y = velocity * Math.sin((car.angle - 90) * angleRotation);
@@ -63,4 +81,7 @@ function update() {
       car.body.angularVelocity = 5 * (velocity / 1000);
   else
       car.body.angularVelocity = 0;
+}
+
+function render() {
 }

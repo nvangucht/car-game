@@ -8,6 +8,7 @@ function preload() {
 var cursors;
 var velocity = 0;
 var car;
+var drop;
 
 function create() {
   /*Enable Phyics Engine*/
@@ -16,7 +17,12 @@ function create() {
   var map = game.add.sprite(0,0,'map');
   /*Adding car*/
   car = game.add.sprite(570,100,'car');
+
+  drop = game.add.sprite(570,100,'car');
+
   game.physics.p2.enable(car);
+  game.physics.p2.enable(drop);
+
   car.body.angle = 90;
   cursors = game.input.keyboard.createCursorKeys();
 }
