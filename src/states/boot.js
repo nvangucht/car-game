@@ -1,3 +1,5 @@
+import Player from '../objects/Player';
+
 class Boot extends Phaser.State {
 
   constructor() {
@@ -8,8 +10,9 @@ class Boot extends Phaser.State {
         velocity,
         car,
         angleRotation,
-        maxSpeed = 250,
-        group1;
+        maxSpeed,
+        group1,
+        player;
   }
 
   preload() {
@@ -20,19 +23,23 @@ class Boot extends Phaser.State {
 
     this.velocity = 0;
 
-    this.group1 = this.game.add.group();
-
     this.game.world.setBounds(0, 0, 2000, 2000);
     this.game.camera.y = 200;
 
     this.angleRotation = 0.01745;
     this.maxSpeed = 250;
-    //  Enable p2 physics
+
     this.game.physics.startSystem(Phaser.Physics.P2JS);
 
     this.game.stage.backgroundColor = '#124184';
 
-    this.game.physics.p2.gravity.y = -50;
+    // this.game.physics.p2.gravity.y = -50;
+
+    this.group1 = this.game.add.group();
+
+    this.player = new Player(this.game, 300, 400);
+
+   
 
     this.sprite = this.game.add.sprite(32, 450, 'car');
     this.car = this.game.add.sprite(100, 400, 'car');
@@ -51,51 +58,51 @@ class Boot extends Phaser.State {
   }
 
   update() {
+    this.player.updatePlayer(this.cursors);
     /*Update Velocity*/
 
-    this.car.body.gravity.y = -100;
+    // this.car.body.gravity.y = -100;
 
-    if (this.cursors.up.isDown && this.velocity <= this.maxSpeed - 100) {
-      this.velocity += 7;
-    } else if (this.cursors.down.isDown && this.velocity <= this.maxSpeed) {
-      this.velocity -= 7;
-    }
-
-    // if(this.sprite.body.y <= 50) {
-    //   this.sprite.kill();
-    //   console.log(this.sprite.body.y);
-    // } 
-
-    // if (this.car.body <= 300) {
-    //   this.car.body = 401;
+    // if (this.cursors.up.isDown && this.velocity <= this.maxSpeed - 100) {
+    //   this.velocity += 7;
+    // } else if (this.cursors.down.isDown && this.velocity <= this.maxSpeed) {
+    //   this.velocity -= 7;
     // }
 
+    // // if(this.sprite.body.y <= 50) {
+    // //   this.sprite.kill();
+    // //   console.log(this.sprite.body.y);
+    // // } 
 
-    // /*Rotation of Car*/
-    if (this.cursors.left.isDown) {
-        this.car.body.angularVelocity = -5 * (this.velocity / 1000);
-    }
-    else if (this.cursors.right.isDown) {
-        this.car.body.angularVelocity = 5 * (this.velocity / 1000);
-    }
-    else {
-        this.car.body.angularVelocity = 0;
-    }
+    // // if (this.car.body <= 300) {
+    // //   this.car.body = 401;
+    // // }
 
-    if (this.sprite.body.y <= 50) {
-      this.sprite.body.y = 600;
-      this.sprite.body.velocity.y = 10;
-    }
+    // // this.player.updatePlayer(this.cursors, {}, deltaTime);
 
-    // /*Set X and Y Speed of Velocity*/
-    this.car.body.velocity.x = this.velocity * Math.cos((this.car.angle - 90) * this.angleRotation);
-    this.car.body.velocity.y = this.velocity * Math.sin((this.car.angle - 90) * this.angleRotation);
+
+    // // /*Rotation of Car*/
+    // if (this.cursors.left.isDown) {
+    //     this.car.body.angularVelocity = -5 * (this.velocity / 1000);
+    // }
+    // else if (this.cursors.right.isDown) {
+    //     this.car.body.angularVelocity = 5 * (this.velocity / 1000);
+    // }
+    // else {
+    //     this.car.body.angularVelocity = 0;
+    // }
+
+    // if (this.sprite.body.y <= 50) {
+    //   this.sprite.body.y = 600;
+    //   this.sprite.body.velocity.y = 10;
+    // }
+
+    // // /*Set X and Y Speed of Velocity*/
+    // this.car.body.velocity.x = this.velocity * Math.cos((this.car.angle - 90) * this.angleRotation);
+    // this.car.body.velocity.y = this.velocity * Math.sin((this.car.angle - 90) * this.angleRotation);
   }
 
   render() {
-
-      this.game.debug.cameraInfo(this.game.camera, 32, 32);
-      // this.game.debug.cameraInfo(this.game.camera, 32, 32);
 
   }
 
