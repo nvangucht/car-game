@@ -14,17 +14,23 @@ export default class Player extends Phaser.Sprite {
         // game.load.audio('playerJump', 'assets/Player/jump.ogg');
     }
 
+    create () {
+        this.body.gravity.y = -200;
+        this.body.bounce.setTo(0.9, 0.9);
+    }
+
     updatePlayer(cursors) {
-        this.body.gravity.y = -100;
+        // this.body.gravity.y = -100;
 
         this._handleInput(cursors);
     }
 
     _handleInput(cursors, contacts, delta) {
+        this.velocity -= 1;
         if (cursors.up.isDown && this.velocity <= this.maxSpeed - 100) {
           this.velocity += 7;
-        } else if (cursors.down.isDown && this.velocity <= this.maxSpeed) {
-          this.velocity -= 7;
+        } else if (cursors.down.isDown) {
+          this.velocity = 0;
         }
 
         // /*Rotation of Car*/
