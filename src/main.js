@@ -7,7 +7,7 @@ import Gameover from './states/gameover';
 var game = new Phaser.Game(1280, 800, Phaser.AUTO, 'Go To Work!');
 
 game.state.add('boot', new Boot());
-// game.state.add('game', new Game());
+game.state.add('game', new Game());
 // game.state.add('menu', new Menu());
 // game.state.add('preloader', new Preloader());
 // game.state.add('gameover', new Gameover());

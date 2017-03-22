@@ -1,36 +1,31 @@
 export default class Player extends Phaser.Sprite {
-    constructor(game, x, y) {
+    constructor(game, x = 0, y = 0) {
         super(game, x, y, 'car');
 
         this.velocity = 0,
         this.angleRotation = 0.01745,
         this.maxSpeed = 250;
+        this.worldBoundaryCollisionY = 250;
+        this.scale.setTo(0.5, 0.5);
 
         game.physics.p2.enable(this);
         game.stage.addChild(this);
     }
 
-    static loadSounds(game) {
-        // game.load.audio('playerJump', 'assets/Player/jump.ogg');
-    }
-
     create () {
-        this.body.gravity.y = -200;
-        this.body.bounce.setTo(0.9, 0.9);
     }
 
     updatePlayer(cursors) {
-        // this.body.gravity.y = -100;
 
-        this._handleInput(cursors);
-    }
-
-    _handleInput(cursors, contacts, delta) {
-        this.velocity -= 1;
-        if (cursors.up.isDown && this.velocity <= this.maxSpeed - 100) {
+        if (cursors.up.isDown && this.velocity <= this.maxSpeed) {
           this.velocity += 7;
-        } else if (cursors.down.isDown) {
-          this.velocity = 0;
+        } else if (cursors.down.isDown && this.velocity >= (this.maxSpeed * -1)) {
+          this.velocity -= 7;
+        }
+
+        if (this.body.y <= this.worldBoundaryCollisionY) {
+            this.body.y += 1;
+            this.velocity = 0;
         }
 
         // /*Rotation of Car*/

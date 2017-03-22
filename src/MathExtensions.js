@@ -13,7 +13,7 @@ export function plotOnBell(x, stdD = .2, mean = .5)
     return Math.pow(denominator, pow);
 }
 
-export function random(min, max)
+export default function random(min, max)
 {
     return Math.random() * (max - min) + min;
 }
