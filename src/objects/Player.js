@@ -1,7 +1,8 @@
 export default class Player extends Phaser.Sprite {
-    constructor(game, x = 0, y = 0) {
+    constructor(game, road, x = 0, y = 0) {
         super(game, x, y, 'car');
 
+        this.road = road;
         this.velocity = 0,
         this.angleRotation = 0.01745,
         this.maxSpeed = 250;
@@ -16,32 +17,29 @@ export default class Player extends Phaser.Sprite {
     }
 
     updatePlayer(cursors) {
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+        this.road.tilePosition.y += 5;
+        this.body.y += 2;
 
-        if (cursors.up.isDown && this.velocity <= this.maxSpeed) {
-          this.velocity += 7;
-        } else if (cursors.down.isDown && this.velocity >= (this.maxSpeed * -1)) {
-          this.velocity -= 7;
+        if (cursors.left.isDown)
+        {
+            this.body.velocity.x = -200;
         }
-
-        if (this.body.y <= this.worldBoundaryCollisionY) {
-            this.body.y += 1;
-            this.velocity = 0;
-        }
-
-        // /*Rotation of Car*/
-        if (cursors.left.isDown) {
-            this.body.angularVelocity = -5 * (this.velocity / 1000);
-        }
-        else if (cursors.right.isDown) {
-            this.body.angularVelocity = 5 * (this.velocity / 1000);
-        }
-        else {
-            this.body.angularVelocity = 0;
+        else if (cursors.right.isDown)
+        {
+            this.body.velocity.x = 200;
         }
 
-        // /*Set X and Y Speed of Velocity*/
-        this.body.velocity.x = this.velocity * Math.cos((this.angle - 90) * this.angleRotation);
-        this.body.velocity.y = this.velocity * Math.sin((this.angle - 90) * this.angleRotation);
+        if (cursors.up.isDown)
+        {
+            this.road.tilePosition.y += 6;
+            this.body.velocity.y = -200;
+        }
+        else if (cursors.down.isDown)
+        {
+            this.body.velocity.y = 100;
+        }
     }
 
 }

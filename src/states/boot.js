@@ -5,8 +5,8 @@ export default class Boot extends Phaser.State {
   }
 
   preload() {
-    this.game.load.spritesheet('car','./assets/car.png');
-    this.game.load.spritesheet('road','./assets/road.png');
+    this.game.load.spritesheet('car','./assets/white_car.png');
+    this.game.load.image('road','./assets/road.png');
     this.game.load.audio('themesong', './assets/Get-to-Work-WIP.ogg');
   }
 

@@ -26,29 +26,29 @@ class Game extends Phaser.State {
   }
 
   createMap() {
-    this.game.stage.backgroundColor = '#124184';
+    this.game.stage.backgroundColor = '#005493';
 
-    this.world.setBounds(0, 0, 1400, 1200);
-    this.game.camera.y = 200;
+    // this.world.setBounds(0, 0, 1000, 1000);
 
-    this.road = new Road(this.game, 400, 400);
-    this.game.world.bringToTop(this.road);
+    this.road = this.game.add.tileSprite(0, 0, 1920, 1080, 'road');
+    this.road.scale.setTo(0.5, 0.5);
+
+    console.log(this.road.y);
   }
 
   createTraffic() {
     let trafficGroup = this.game.add.group();
-    this.player = new Player(this.game, 300, 600);
-    this.enemy = new Enemy(this.game, 500, 400);
+    this.player = new Player(this.game, this.road, 500, 300);
+    // this.enemy = new Enemy(this.game, 500, 400);
 
-    trafficGroup.add(this.player);
-    trafficGroup.add(this.enemy);
+    // trafficGroup.add(this.player);
+    // trafficGroup.add(this.enemy);
 
     // this.game.world.bringToTop(trafficGroup);
   }
 
   update() {
     this.player.updatePlayer(this.cursors);
-    this.enemy.updatePlayer(this.cursors);
   }
 
   endGame() {
