@@ -1,23 +1,20 @@
 export default class Enemy extends Phaser.Sprite {
-    constructor(game, x, y, player) {
-        super(game, x, y, 'car');
+    constructor(game, x, y) {
+        super(game, x, y, 'enemy_car');
 
-        this.velocity = 1,
-        this.angleRotation = 0.01745,
-        this.maxSpeed = 5;
-
-        game.physics.p2.enable(this);
-        // this.body.collidesWith(player);
-        // this.body.collideWorldBounds=false;
+        this.scale.setTo(0.5, 0.5);
+        this.speed = 2;
+        game.physics.arcade.enable(this);
     }
 
-    static loadSounds(game) {
-        // game.load.audio('playerJump', 'assets/Player/jump.ogg');
+    create () {
+        this.body.immovable = true;
+        this.body.mass = -100;
     }
 
-    updatePlayer(cursors) {
-        if (this.body.velocity.y <= this.maxSpeed) {
-            this.body.velocity.y -= this.velocity;
-        }
+    update() {
+        let cursors = this.cursors;
+
+         this.body.y += this.speed;
     }
 }
