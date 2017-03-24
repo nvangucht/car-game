@@ -36,12 +36,12 @@ class Game extends Phaser.State {
 
     this.traffic.enableBody = true;
 
-    this.game.time.events.repeat(Phaser.Timer.SECOND * 2, Infinity, this.createCar, this);
+    this.game.time.events.repeat(Phaser.Timer.SECOND * 1.35, Infinity, this.createCar, this);
   }
 
   update() {
     this.player.updatePlayer(this.cursors);
-    this.road.tilePosition.y += 5;
+    this.road.tilePosition.y += 9;
 
     this.traffic.forEach(function (enemy) {
         enemy.body.y += 1;
@@ -52,14 +52,15 @@ class Game extends Phaser.State {
   }
 
   createCar () {
-    let enemy;
-    let location;
-    let coords = [{x: 490, y: -200}, {x: 369, y: -200}];
-    let index;
+    let colors = [ "orng_car", "turq_car", "purple_car" ];
+    let coords = [ { x : 369, y : -200}, { x : 430, y : -200}, { x : 492, y: -200}, { x : 552, y : -200} ],
+        randomColor = Math.floor(Math.random() * 3),
+        randomCoord = Math.floor(Math.random() * 4),
+        color = colors[randomColor],
+        location = coords[randomCoord],
 
-    index = (Math.floor((Math.random() * 2) + 1) - 1);
-    location = coords[index];
-    enemy = this.traffic.create(location.x, location.y, "enemy_car");
+        enemy = this.traffic.create(location.x, location.y, color);
+
     enemy.scale.setTo(0.5, 0.5);
   }
 
