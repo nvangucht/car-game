@@ -12,7 +12,7 @@ class Menu extends Phaser.State {
 
     this.saveVarsToLocalStorage();
 
-    this.input.onDown.add(this.restartGame, this);
+    // this.input.onDown.add(this.restartGame, this);
   }
 
   saveVarsToLocalStorage(){
@@ -25,10 +25,10 @@ class Menu extends Phaser.State {
 
   update() {}
 
-  restartGame () {
-    this.resetGlobalVariables();
-    this.game.state.start('menu');
-  }
+  // restartGame () {
+  //   this.resetGlobalVariables();
+  //   this.game.state.start('menu');
+  // }
 
 }
 

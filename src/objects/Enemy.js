@@ -1,10 +1,10 @@
 export default class Enemy extends Phaser.Sprite {
-    constructor(game, x, y, color, player) {
+    constructor(game, x, y, color, player, speed = 150) {
         super(game, x, y, color);
 
         this.player = player;
         this.scale.setTo(0.5, 0.5);
-        this.speed = 140;
+        this.speed = speed;
         this.mass = 100;
         game.physics.arcade.enable(this);
 
@@ -19,5 +19,9 @@ export default class Enemy extends Phaser.Sprite {
     update() {
         this.game.physics.arcade.collide(this.player, this);
         this.body.velocity.y = this.speed;
+
+        if (this.body.y === 700) {
+            this.destroy();
+        }
     }
 }

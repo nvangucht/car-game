@@ -5,34 +5,48 @@ export default class Traffic extends Phaser.Group {
         super();
         this.game = game;
         this.player = player;
+        this.traffic;
+        this.makeway;
     }
 
-    createTraffic() {
+    create() {
       this.traffic = this.game.add.group();
 
-      this.game.time.events.repeat(Phaser.Timer.SECOND, Infinity, this.createCar, this);
+      this.game.time.events.repeat(Phaser.Timer.SECOND, Infinity, this.addCar, this);
     }
 
-    createCar () {
-      let colors = [ "orng_car", "turq_car", "purple_car", "semi_truck" ];
-      let coords = [ { x : 369, y : -200}, { x : 430, y : -200}, { x : 492, y: -200}, { x : 552, y : -200} ],
-          randomColor = Math.floor(Math.random() * 4),
+    addCar () {
+      let colors = [ "orng_car", "turq_car", "purple_car", "black_car", "green_car", "blue_car"];
+      let coords = [ { x : 369, y : -160}, { x : 430, y : -160}, { x : 492, y: -160}, { x : 552, y : -160} ],
+          randomColor = Math.floor(Math.random() * 6),
           randomCoord = Math.floor(Math.random() * 4),
-          color = colors[randomColor],
-          location = coords[randomCoord],
-          enemy = new Enemy(this.game, location.x, location.y)
-          // enemy = this.traffic.add(new Enemy(this.game, 400, 400)location.x, location.y, color);
-          this.traffic.add(enemy);
+          color,
+          location = coords[randomCoord];
 
+      let makeway = false;
+      let randomRange = Math.floor(Math.random() * 100);
 
-      // console.log(enemy.body.mass)
-
-      this.traffic.add(enemy);
-      if (color === "semi_truck") {
-        if (Math.floor(Math.random() * 4) === 0) {
-          // this.semiHonkLong.play();
-        }
+      if (randomRange <= 2) {
+          color = "cop_car";
+          // this.siren.play();
+      } else {
+          color = colors[randomColor];
       }
+
+      var semi = new SemiTruck(this.game, 600, 600, this.player);
+
+      // if (this.makeway) {
+      //   this.traffic.add(new SemiTruck(this.game, 552, 600, color, this.player));
+      //   this.makeway = false;
+      // } else {
+         this.traffic.add(new Enemy(this.game, location.x, location.y, color, this.player));
+      // }
+
+      // if (color === "semi_truck") {
+      //   // if (Math.floor(Math.random() * 4) === 0) {
+      //     this.semiHonkLong.play();
+      //   // }
+      // }
     }
 
     update() {

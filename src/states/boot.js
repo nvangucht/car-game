@@ -6,6 +6,10 @@ export default class Boot extends Phaser.State {
 
   preload() {
     // images
+
+    this.game.load.image('road','./assets/images/road.png');
+
+    // cars
     this.game.load.spritesheet('car','./assets/images/white_car.png');
     this.game.load.spritesheet('orng_car','./assets/images/orng_car.png');
     this.game.load.spritesheet('purple_car','./assets/images/purple_car.png');
@@ -13,13 +17,14 @@ export default class Boot extends Phaser.State {
     this.game.load.spritesheet('blue_car','./assets/images/blue_car.png');
     this.game.load.spritesheet('black_car','./assets/images/black_car.png');
     this.game.load.spritesheet('green_car','./assets/images/green_car.png');
-
     this.game.load.spritesheet('cop_car','./assets/images/cop_car.png');
-    this.game.load.spritesheet('semi_truck','./assets/images/semi_truck.png');
-    this.game.load.image('road','./assets/images/road.png');
+    this.game.load.spritesheet('semi_truck','./assets/images/semi.png');
 
+    //obstacles
+    this.game.load.spritesheet('banana','./assets/images/banana.png');
     // audio
     this.game.load.audio('themesong', './assets/audio/themesong.ogg');
+    this.game.load.audio('vroom', './assets/audio/vroom.ogg');
     this.game.load.audio('brake', './assets/audio/brake.ogg');
     this.game.load.audio('semi_honk_long', './assets/audio/semi_honk_long.ogg');
     this.game.load.audio('semi_honk_med', './assets/audio/semi_honk_med.ogg');
