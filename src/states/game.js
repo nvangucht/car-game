@@ -10,18 +10,22 @@ class Game extends Phaser.State {
     let cursors,
         player,
         road,
-        traffic;
+        traffic,
+        semiHonkLong;
   }
 
   create() {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.sound.play('themesong');
 
+    this.semiHonkLong = this.game.add.audio('semi_honk_long');
+    this.semiHonkLong.volume = 0.85;
+
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
     this.createMap();
-    this.player = new Player(this.game, this.road, 490, 300);
     this.createTraffic();
+    this.player = new Player(this.game, this.road, 490, 300);
   }
 
   createMap() {
@@ -32,36 +36,40 @@ class Game extends Phaser.State {
   }
 
   createTraffic() {
-    this.traffic = this.game.add.physicsGroup();
+    this.traffic = this.game.add.group();
 
-    this.traffic.enableBody = true;
+    this.traffic.add(new Enemy(this.game, 400, 200));
 
-    this.game.time.events.repeat(Phaser.Timer.SECOND * 1.35, Infinity, this.createCar, this);
+    this.game.time.events.repeat(Phaser.Timer.SECOND, Infinity, this.createCar, this);
   }
 
   update() {
-    this.player.updatePlayer(this.cursors);
-    this.road.tilePosition.y += 9;
+    let cursors = this.cursors;
+    this.player.updatePlayer(cursors);
+    this.road.tilePosition.y += 11;
 
-    this.traffic.forEach(function (enemy) {
-        enemy.body.y += 1;
-    });
-
-    this.game.physics.arcade.collide(this.player, this.traffic, function (player, traffic) {});
+    this.game.physics.arcade.collide(this.player, this.traffic);
+    this.game.physics.arcade.collide(this.traffic);
 
   }
 
   createCar () {
-    let colors = [ "orng_car", "turq_car", "purple_car" ];
+    let colors = [ "orng_car", "turq_car", "purple_car", "semi_truck" ];
     let coords = [ { x : 369, y : -200}, { x : 430, y : -200}, { x : 492, y: -200}, { x : 552, y : -200} ],
-        randomColor = Math.floor(Math.random() * 3),
+        randomColor = Math.floor(Math.random() * 4),
         randomCoord = Math.floor(Math.random() * 4),
         color = colors[randomColor],
         location = coords[randomCoord],
+        enemy = new Enemy(this.game, location.x, location.y)
+        // enemy = this.traffic.add(new Enemy(this.game, 400, 400)location.x, location.y, color);
+        this.traffic.add(enemy);
 
-        enemy = this.traffic.create(location.x, location.y, color);
-
-    enemy.scale.setTo(0.5, 0.5);
+    this.traffic.add(enemy);
+    if (color === "semi_truck") {
+      if (Math.floor(Math.random() * 4) === 0) {
+        this.semiHonkLong.play();
+      }
+    }
   }
 
   endGame() {

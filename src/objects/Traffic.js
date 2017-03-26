@@ -1,22 +1,42 @@
-export default class Traffic  {
-    constructor(game) {
+import Enemy from './Enemy';
+
+export default class Traffic extends Phaser.Group {
+    constructor(game, player) {
+        super();
         this.game = game;
+        this.player = player;
     }
 
     createTraffic() {
-      this.traffic = this.game.add.physicsGroup();
+      this.traffic = this.game.add.group();
 
-      this.traffic.enableBody = true;
-
-      this.game.time.events.repeat(Phaser.Timer.SECOND * 4, Infinity, this.createCar, this);
+      this.game.time.events.repeat(Phaser.Timer.SECOND, Infinity, this.createCar, this);
     }
 
     createCar () {
-      let coords = [{x: 490, y: -200}, {x: 369, y: -200}];
-      let index = Math.floor((Math.random() * 2) + 1) - 1;
-      let location = coords[index];
-      let enemy = this.traffic.create(location.x, location.y, "enemy_car");
+      let colors = [ "orng_car", "turq_car", "purple_car", "semi_truck" ];
+      let coords = [ { x : 369, y : -200}, { x : 430, y : -200}, { x : 492, y: -200}, { x : 552, y : -200} ],
+          randomColor = Math.floor(Math.random() * 4),
+          randomCoord = Math.floor(Math.random() * 4),
+          color = colors[randomColor],
+          location = coords[randomCoord],
+          enemy = new Enemy(this.game, location.x, location.y)
+          // enemy = this.traffic.add(new Enemy(this.game, 400, 400)location.x, location.y, color);
+          this.traffic.add(enemy);
 
-      enemy.scale.setTo(0.5, 0.5);
+
+      // console.log(enemy.body.mass)
+
+      this.traffic.add(enemy);
+      if (color === "semi_truck") {
+        if (Math.floor(Math.random() * 4) === 0) {
+          // this.semiHonkLong.play();
+        }
+      }
+    }
+
+    update() {
+      this.game.physics.arcade.collide(this.player, this);
+      this.game.physics.arcade.collide(this);
     }
 }
