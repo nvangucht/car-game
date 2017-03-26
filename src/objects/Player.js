@@ -37,7 +37,7 @@ export default class Player extends Phaser.Sprite {
         }
 
         if (cursors.up.isDown) {
-            this.road.tilePosition.y += 4;
+            // this.road.tilePosition.y += 4;
             this.body.velocity.y = -30;
             this.distanceTraveled += 1;
         } else if (cursors.down.isDown) {
@@ -46,7 +46,7 @@ export default class Player extends Phaser.Sprite {
         }
 
         if (cursors.down.downDuration(1)) {
-            this.road.tilePosition.y -= 8;
+            // this.road.tilePosition.y -= 8;
 
             this.brake.play();
         }
