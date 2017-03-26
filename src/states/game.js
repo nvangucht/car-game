@@ -11,15 +11,23 @@ class Game extends Phaser.State {
         player,
         road,
         traffic,
-        semiHonkLong;
+        semiHonkLong,
+        siren,
+        music;
   }
 
   create() {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
-    this.game.sound.play('themesong');
+
+    this.music = this.game.add.audio('themesong');
+    this.music.loop = true;
+    this.music.play();
 
     this.semiHonkLong = this.game.add.audio('semi_honk_long');
-    this.semiHonkLong.volume = 0.85;
+    this.semiHonkLong.volume = 1;
+
+    this.siren = this.game.add.audio('cop_siren');
+    this.siren.volume = 1;
 
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
@@ -54,17 +62,25 @@ class Game extends Phaser.State {
   }
 
   createCar () {
-    let colors = [ "orng_car", "turq_car", "purple_car", "semi_truck" ];
-    let coords = [ { x : 369, y : -200}, { x : 430, y : -200}, { x : 492, y: -200}, { x : 552, y : -200} ],
-        randomColor = Math.floor(Math.random() * 4),
+    let colors = [ "orng_car", "turq_car", "purple_car", "black_car", "green_car", "blue_car"];
+    let coords = [ { x : 369, y : -150}, { x : 430, y : -150}, { x : 492, y: -150}, { x : 552, y : -150} ],
+        randomColor = Math.floor(Math.random() * 6),
         randomCoord = Math.floor(Math.random() * 4),
-        color = colors[randomColor],
-        location = coords[randomCoord],
-        enemy = new Enemy(this.game, location.x, location.y)
-        // enemy = this.traffic.add(new Enemy(this.game, 400, 400)location.x, location.y, color);
-        this.traffic.add(enemy);
+        color,
+        location = coords[randomCoord];
 
-    this.traffic.add(enemy);
+
+    let randomRange = Math.floor(Math.random() * 100);
+
+    if (randomRange <= 5) {
+        color = "cop_car";
+        this.siren.play();
+    } else {
+        color = colors[randomColor];
+    }
+
+    this.traffic.add(new Enemy(this.game, location.x, location.y, color, this.player));
+
     if (color === "semi_truck") {
       if (Math.floor(Math.random() * 4) === 0) {
         this.semiHonkLong.play();
