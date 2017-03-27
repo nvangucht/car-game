@@ -11,6 +11,7 @@ export default class Player extends Phaser.Sprite {
         this.brake;
         this.brakeSpeed = 90;
         this.vroom;
+        this.crashSound;
 
         game.physics.arcade.enable(this);
         game.stage.addChild(this);
@@ -24,6 +25,7 @@ export default class Player extends Phaser.Sprite {
         this.brake = this.game.add.audio('brake');
         this.vroom = this.game.add.audio('vroom');
         this.brake.volume = 0.35;
+        this.crashSound = this.game.add.audio('car_hit');
     }
 
     updatePlayer(cursors) {
@@ -31,23 +33,20 @@ export default class Player extends Phaser.Sprite {
         this.body.velocity.y = 0;
 
         if (cursors.left.isDown && this.body.x >= 370) {
-            this.body.velocity.x = -100;
+            this.body.velocity.x = -110;
         } else if (cursors.right.isDown && this.body.x <= 550) {
-            this.body.velocity.x = + 100;
+            this.body.velocity.x = + 110;
         }
 
         if (cursors.up.isDown) {
             // this.road.tilePosition.y += 4;
-            this.body.velocity.y = -30;
+            this.body.velocity.y = -40;
             this.distanceTraveled += 1;
         } else if (cursors.down.isDown) {
             this.body.velocity.y += 200;
-            this.body.angle += 1;
         }
 
         if (cursors.down.downDuration(1)) {
-            // this.road.tilePosition.y -= 8;
-
             this.brake.play();
         }
 
@@ -55,4 +54,9 @@ export default class Player extends Phaser.Sprite {
             this.vroom.play();
         }
     }
+
+    playCrashSounce () {
+        this.crashSound.play();
+    }
+
 }

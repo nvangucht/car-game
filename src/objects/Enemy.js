@@ -12,6 +12,7 @@ export default class Enemy extends Phaser.Sprite {
     }
 
     create () {
+        this.anchor.setTo(0.5, 0.5);
         this.body.mass = this.mass;
         this.body.bounce = new Phaser.Point(1, 1);
     }
@@ -20,7 +21,7 @@ export default class Enemy extends Phaser.Sprite {
         this.game.physics.arcade.collide(this.player, this);
         this.body.velocity.y = this.speed;
 
-        if (this.body.y === 700) {
+        if (this.body.y >= 800) {
             this.destroy();
         }
     }

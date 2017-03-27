@@ -16,11 +16,13 @@ class Game extends Phaser.State {
     this.traffic;
     this.semiHonkLong;
     this.siren;
+    this.crashSound;
     this.music;
     this.makeway;
     this.openLane;
     this.makeway = false;
     this.gameTimer;
+    this.coords = [ { x : 385, y : -300}, { x : 447, y : -300}, { x : 510, y: -300}, { x : 570, y : -300} ];
   }
 
   create() {
@@ -31,83 +33,78 @@ class Game extends Phaser.State {
     this.music.play();
 
     this.semiHonkLong = this.game.add.audio('semi_honk_long');
-    this.semiHonkLong.volume = 1;
+    this.semiHonkLong.volume = .85;
 
     this.siren = this.game.add.audio('cop_siren');
-    this.siren.volume = 1;
+
+    this.siren.volume = .85;
+
+    this.crashSound = this.game.add.audio('car_hit');
 
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
     this.road = new Road(this.game);
     this.road.create();
 
+    this.player = new Player(this.game, this.road, 510, 300);
     this.createTraffic();
 
     this.gameTimer = new GameTimer(this.game);
     this.gameTimer.start();
 
-    this.player = new Player(this.game, this.road, 510, 300);
+    // this.camera.fade('#000000');
   }
 
   createTraffic() {
     this.traffic = this.game.add.group();
 
-     // this.traffic = new Traffic(this.game, this.player);
-
     this.game.time.events.repeat(Phaser.Timer.SECOND, Infinity, this.createCar, this);
-    this.game.time.events.repeat(Phaser.Timer.SECOND * 5, Infinity, this.makeWayForLane, this);
   }
 
   render() {
-    this.gameTimer.render();
+    // this.gameTimer.render();
   }
 
   update() {
     let cursors = this.cursors;
     this.player.updatePlayer(cursors);
     this.road.update();
+    this.gameTimer.render();
 
-    this.game.physics.arcade.collide(this.player, this.traffic);
+    this.game.physics.arcade.collide(this.player, this.traffic, function (player) {
+      player.playCrashSounce()
+    });
     this.game.physics.arcade.collide(this.traffic);
   }
 
   createCar () {
-    let colors = [ "orng_car", "turq_car", "purple_car", "black_car", "green_car", "blue_car"];
-    let coords = [ { x : 369, y : -160}, { x : 430, y : -160}, { x : 492, y: -160}, { x : 552, y : -160} ],
-        randomColor = Math.floor(Math.random() * 6),
+    let colors = [ "orng_car", "turq_car", "purple_car", "black_car", "green_car", "blue_car" ];
+    let coords = this.coords,
+        randomColor = Math.floor(Math.random() * colors.length),
         randomCoord = Math.floor(Math.random() * 4),
         color,
         location = coords[randomCoord];
 
-    let makeway = false;
     let randomRange = Math.floor(Math.random() * 100);
 
-    if (randomRange <= 2) {
+    if (randomRange <= 4) {
         color = "cop_car";
         this.siren.play();
+        if (this.player.body.y <= 125) {
+          var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, 'SPEEDING! \n BUSTED!', {
+            font: '42px Arial', fill: '#ffffff', align: 'center'
+          });
+          text.anchor.set(0.5);
+          this.game.world.bringToTop(text);
+        }
+    } else if (randomRange > 5 && randomRange <= 10) {
+      color = "semi_truck";
+      this.semiHonkLong.play();
     } else {
         color = colors[randomColor];
     }
 
-    var semi = new SemiTruck(this.game, 600, 600, this.player);
-
-    if (this.makeway) {
-      this.traffic.add(new SemiTruck(this.game, 552, 600, color, this.player));
-      this.makeway = false;
-    } else {
-       this.traffic.add(new Enemy(this.game, location.x, location.y, color, this.player));
-    }
-
-    // if (color === "semi_truck") {
-    //   // if (Math.floor(Math.random() * 4) === 0) {
-    //     this.semiHonkLong.play();
-    //   // }
-    // }
-  }
-
-  makeWayForLane () {
-    this.makeway = true;
-    this.openLane = 1;
+    this.traffic.add(new Enemy(this.game, location.x, location.y, color, this.player));
   }
 
   endGame() {
