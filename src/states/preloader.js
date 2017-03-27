@@ -2,14 +2,18 @@ class Preloader extends Phaser.State {
 
   constructor() {
     super();
-    this.asset = null;
-    this.ready = false;
+    // this.asset = null;
+    // this.ready = false;
+  }
+
+  create () {
+    this.game.state.start('menu');
   }
 
   preload() {
     //setup loading bar
-    this.asset = this.add.sprite(this.game.width * 0.5 - 110, this.game.height * 0.5 - 10, 'preloader');
-    this.load.setPreloadSprite(this.asset);
+    // this.asset = this.add.sprite(this.game.width * 0.5 - 110, this.game.height * 0.5 - 10, 'preloader');
+    // this.load.setPreloadSprite(this.asset);
 
     //Setup loading and its events
     //this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
@@ -18,7 +22,7 @@ class Preloader extends Phaser.State {
 
   update() {
       // if (this.ready) {
-        this.game.state.start('menu');
+        // this.game.state.start('menu');
       // }
   }
 
@@ -27,7 +31,7 @@ class Preloader extends Phaser.State {
   }
 
   onLoadComplete() {
-    this.ready = true;
+    // this.ready = true;
   }
 }
 

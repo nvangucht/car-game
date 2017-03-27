@@ -33,7 +33,7 @@ class Game extends Phaser.State {
     this.music.play();
 
     this.semiHonkLong = this.game.add.audio('semi_honk_long');
-    this.semiHonkLong.volume = .85;
+    this.semiHonkLong.volume = 1;
 
     this.siren = this.game.add.audio('cop_siren');
 
@@ -49,20 +49,14 @@ class Game extends Phaser.State {
     this.player = new Player(this.game, this.road, 510, 300);
     this.createTraffic();
 
-    this.gameTimer = new GameTimer(this.game);
+    this.gameTimer = new GameTimer(this.game, this.player);
     this.gameTimer.start();
-
-    // this.camera.fade('#000000');
   }
 
   createTraffic() {
     this.traffic = this.game.add.group();
 
     this.game.time.events.repeat(Phaser.Timer.SECOND, Infinity, this.createCar, this);
-  }
-
-  render() {
-    // this.gameTimer.render();
   }
 
   update() {

@@ -1,8 +1,9 @@
 export default class GameTimer {
-    constructor(game) {
+    constructor(game, player) {
         this.game = game;
+        this.player = player;
         this.timer = this.game.time.create();
-        this.timerEvent = this.timer.add(Phaser.Timer.SECOND * 60, this.endTimer, this);
+        this.timerEvent = this.timer.add(Phaser.Timer.SECOND * 30, this.endTimer, this);
         this.timeText = "";
     }
 
@@ -15,13 +16,14 @@ export default class GameTimer {
 
     endTimer() {
       this.timer.stop();
+      this.player.destroy();
+      this.game.state.start('gameover');
     }
 
     formatTime(s) {
         var minutes = "0" + Math.floor(s / 60);
         var seconds = "0" + (s - minutes * 60);
-        // return minutes.substr(-2) + ":" + seconds.substr(-2);
-        return seconds.substr(-2);
+        return minutes.substr(-1) + ":" + seconds.substr(-2);
     }
 
     render() {
@@ -29,6 +31,6 @@ export default class GameTimer {
     }
 
     endGame() {
-      this.game.state.start('gameover');
+      this.game.state.start('menu');
     }
 }
