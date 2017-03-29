@@ -35,7 +35,7 @@ export default class Boot extends Phaser.State {
   }
 
   create() {
-    this.game.state.start('game');
+    this.game.state.start('menu');
   }
 
   update() {
