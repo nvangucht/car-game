@@ -2,5 +2,5 @@
 *.db
 build/
 node_modules/
-releases/
-Get To Work-darwin-x64/
+release*
+
