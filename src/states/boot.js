@@ -35,6 +35,7 @@ export default class Boot extends Phaser.State {
   }
 
   create() {
+    this.initGlobalVariables();
     this.game.state.start('menu');
   }
 
@@ -42,8 +43,9 @@ export default class Boot extends Phaser.State {
   }
 
   initGlobalVariables(){
+    var themesong = this.game.add.audio('themesong');
     this.game.global = {
-
+        themesong: themesong
     };
   }
 

@@ -15,9 +15,10 @@ export default class GameTimer {
     }
 
     endTimer() {
-      this.timer.stop();
-      this.player.destroy();
-      this.game.state.start('gameover');
+        this.game.global.themesong.stop();
+        this.timer.stop();
+        this.player.destroy();
+        this.game.state.start('gameover');
     }
 
     formatTime(s) {

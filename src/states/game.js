@@ -28,9 +28,10 @@ class Game extends Phaser.State {
   create() {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.music = this.game.add.audio('themesong');
-    this.music.loop = true;
-    this.music.play();
+    this.game.global.themesong.play();
+    // this.music = this.game.add.audio('themesong');
+    // this.music.loop = true;
+    // this.music.play();
 
     this.semiHonkLong = this.game.add.audio('semi_honk_long');
     this.semiHonkLong.volume = 1;
@@ -54,6 +55,8 @@ class Game extends Phaser.State {
   }
 
   createTraffic() {
+    // console.log(this.game.global.themesong);
+    console.log(this.game);
     this.traffic = this.game.add.group();
 
     this.game.time.events.repeat(Phaser.Timer.SECOND, Infinity, this.createCar, this);
@@ -102,6 +105,7 @@ class Game extends Phaser.State {
   }
 
   endGame() {
+    this.game.global.themesong.stop();
     this.game.state.start('gameover');
   }
 

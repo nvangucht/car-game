@@ -4,6 +4,11 @@ export default class Menu extends Phaser.State {
 
   constructor() {
     super();
+    this.music = null;
+  }
+
+  preload () {
+    this.game.load.audio('menu_song', './assets/audio/menu.ogg');
   }
 
   create() {
@@ -13,6 +18,9 @@ export default class Menu extends Phaser.State {
         font: '42px silkscreennormal', fill: '#ffffff', align: 'center'
       });
       text.anchor.set(0.5);
+
+      this.music = this.game.add.audio('menu_song');
+      this.music.play();
 
       this.input.onDown.add(this.startGame, this);
     }
@@ -26,6 +34,7 @@ export default class Menu extends Phaser.State {
     }
 
   startGame () {
+    this.music.stop();
     this.game.state.start('game');
   }
 
