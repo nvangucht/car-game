@@ -16,6 +16,12 @@ export default class GameTimer {
 
     endTimer() {
         this.game.global.themesong.stop();
+
+        if (this.game.global.distance > 2000) {
+          console.log("you win!");
+        } else {
+          console.log("You lose!");
+        }
         this.timer.stop();
         this.player.destroy();
         this.game.state.start('gameover');
@@ -29,9 +35,5 @@ export default class GameTimer {
 
     render() {
         this.timerText.setText(this.formatTime(Math.round((this.timerEvent.delay - this.timer.ms) / 1000)));
-    }
-
-    endGame() {
-      this.game.state.start('menu');
     }
 }

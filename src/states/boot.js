@@ -24,6 +24,7 @@ export default class Boot extends Phaser.State {
     this.game.load.spritesheet('banana','./assets/images/banana.png');
     // audio
     this.game.load.audio('themesong', './assets/audio/themesong.ogg');
+    this.game.load.audio('game_over', './assets/audio/game_over.ogg');
     this.game.load.audio('vroom', './assets/audio/vroom.ogg');
     this.game.load.audio('brake', './assets/audio/brake.ogg');
     this.game.load.audio('semi_honk_long', './assets/audio/semi_honk_long.ogg');
@@ -44,8 +45,14 @@ export default class Boot extends Phaser.State {
 
   initGlobalVariables(){
     var themesong = this.game.add.audio('themesong');
+    var gameOverSong = this.game.add.audio('game_over');
     this.game.global = {
-        themesong: themesong
+        active: true,
+        themesong: themesong,
+        gameOverSong: gameOverSong,
+        traffic: null,
+        road: null,
+        distance: 0
     };
   }
 

@@ -5,19 +5,14 @@ class GamerOver extends Phaser.State {
     this.music = null;
   }
 
-  preload () {
-    this.game.load.audio('game_over', './assets/audio/game_over.ogg');
-  }
   create() {
+    this.game.global.player.destroy();
     this.game.stage.backgroundColor = '#005493';
 
     var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, '', {
       font: '42px silkscreennormal', fill: '#ffffff', align: 'center'
     });
     text.anchor.set(0.5);
-
-    this.music = this.game.add.audio('game_over');
-    this.music.play();
 
     this.saveVarsToLocalStorage();
 
@@ -37,7 +32,8 @@ class GamerOver extends Phaser.State {
   }
 
   resetGlobalVariables(){
-
+    this.game.global.distance = 0;
+    this.game.global.active = true;
   }
 
   update() {}

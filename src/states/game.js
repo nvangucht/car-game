@@ -29,9 +29,6 @@ class Game extends Phaser.State {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
     this.game.global.themesong.play();
-    // this.music = this.game.add.audio('themesong');
-    // this.music.loop = true;
-    // this.music.play();
 
     this.semiHonkLong = this.game.add.audio('semi_honk_long');
     this.semiHonkLong.volume = 1;
@@ -44,10 +41,10 @@ class Game extends Phaser.State {
 
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
-    this.road = new Road(this.game);
-    this.road.create();
+    this.game.global.road = new Road(this.game);
+    this.game.global.road.create();
 
-    this.player = new Player(this.game, this.road, 510, 300);
+    this.game.global.player = new Player(this.game, this.road, 510, 300);
     this.createTraffic();
 
     this.gameTimer = new GameTimer(this.game, this.player);
@@ -55,22 +52,35 @@ class Game extends Phaser.State {
   }
 
   createTraffic() {
-    // console.log(this.game.global.themesong);
-    console.log(this.game);
     this.traffic = this.game.add.group();
 
-    this.game.time.events.repeat(Phaser.Timer.SECOND, Infinity, this.createCar, this);
+    this.game.time.events.repeat(Phaser.Timer.SECOND * .95, Infinity, this.createCar, this);
   }
 
   update() {
-    let cursors = this.cursors;
-    this.player.updatePlayer(cursors);
-    this.road.update();
+    var game = this.game,
+        cursors = this.cursors;
     this.gameTimer.render();
 
-    this.game.physics.arcade.collide(this.player, this.traffic, function (player) {
-      player.playCrashSounce()
-    });
+    game.global.road.update();
+
+    if (game.global.active) {
+      this.game.global.player.updatePlayer(cursors);
+      this.game.physics.arcade.collide(this.game.global.player, this.traffic, function (player) {
+        player.playCrashSounce();
+
+        game.global.active = false;
+        player.playCrashSounce();
+
+        game.global.themesong.stop();
+        game.global.gameOverSong.play();
+        setTimeout(function () {
+          game.state.start('gameover');
+        }, 2000);
+      });
+    } else {
+      this.game.physics.arcade.collide(this.game.global.player, this.traffic, function (player) {});
+    }
     this.game.physics.arcade.collide(this.traffic);
   }
 
@@ -87,7 +97,7 @@ class Game extends Phaser.State {
     if (randomRange <= 4) {
         color = "cop_car";
         this.siren.play();
-        if (this.player.body.y <= 125) {
+        if (!this.game.global.active && this.game.global.player.body.y <= 125) {
           var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, 'SPEEDING! \n BUSTED!', {
             font: '42px Arial', fill: '#ffffff', align: 'center'
           });
@@ -105,6 +115,11 @@ class Game extends Phaser.State {
   }
 
   endGame() {
+    if (this.game.global.distance) {
+      console.log("you win!");
+    } else {
+      console.log("You lose!");
+    }
     this.game.global.themesong.stop();
     this.game.state.start('gameover');
   }

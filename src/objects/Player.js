@@ -29,29 +29,32 @@ export default class Player extends Phaser.Sprite {
     }
 
     updatePlayer(cursors) {
-        this.body.velocity.x = 0;
-        this.body.velocity.y = 0;
+        if (!this.game.global.paused) {
+            this.body.velocity.x = 0;
+            this.body.velocity.y = 0;
+            this.game.global.distance += 1;
 
-        if (cursors.left.isDown && this.body.x >= 370) {
-            this.body.velocity.x = -110;
-        } else if (cursors.right.isDown && this.body.x <= 550) {
-            this.body.velocity.x = + 110;
-        }
+            if (cursors.left.isDown && this.body.x >= 370) {
+                this.body.velocity.x = -110;
+            } else if (cursors.right.isDown && this.body.x <= 550) {
+                this.body.velocity.x = + 110;
+            }
 
-        if (cursors.up.isDown) {
-            // this.road.tilePosition.y += 4;
-            this.body.velocity.y = -40;
-            this.distanceTraveled += 1;
-        } else if (cursors.down.isDown) {
-            this.body.velocity.y += 200;
-        }
+            if (cursors.up.isDown) {
+                // this.road.tilePosition.y += 4;
+                this.body.velocity.y = -40;
+                this.game.global.distance += 1;
+            } else if (cursors.down.isDown) {
+                this.body.velocity.y += 200;
+            }
 
-        if (cursors.down.downDuration(1)) {
-            this.brake.play();
-        }
+            if (cursors.down.downDuration(1)) {
+                this.brake.play();
+            }
 
-        if (cursors.up.downDuration(1)) {
-            this.vroom.play();
+            if (cursors.up.downDuration(1)) {
+                this.vroom.play();
+            }
         }
     }
 
