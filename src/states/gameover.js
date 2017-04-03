@@ -7,6 +7,7 @@ class GamerOver extends Phaser.State {
 
   create() {
     this.game.global.player.destroy();
+    this.game.global.traffic.destroy();
     this.game.stage.backgroundColor = '#005493';
 
     var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, '', {
@@ -24,7 +25,13 @@ class GamerOver extends Phaser.State {
       font: '42px silkscreennormal', fill: '#ffffff', align: 'center'
     });
     text.anchor.set(0.5);
-    text.setText("Game Over \n \n  Press Click to Restart");
+
+    if (this.game.global.playerWon) {
+      text.setText("You did it! \n \n  Press Up to Restart");
+    } else {
+      text.setText("Game Over \n \n  Press Up to Restart");
+    }
+
   }
 
   saveVarsToLocalStorage(){
@@ -36,7 +43,12 @@ class GamerOver extends Phaser.State {
     this.game.global.active = true;
   }
 
-  update() {}
+  update() {
+     var cursors = this.game.input.keyboard.createCursorKeys();
+      if (cursors.up.isDown) {
+        this.restartGame();
+      }
+  }
 
   restartGame () {
     this.resetGlobalVariables();

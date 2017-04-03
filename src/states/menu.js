@@ -21,8 +21,13 @@ export default class Menu extends Phaser.State {
 
       this.music = this.game.add.audio('menu_song');
       this.music.play();
+    }
 
-      this.input.onDown.add(this.startGame, this);
+    update () {
+      var cursors = this.game.input.keyboard.createCursorKeys();
+      if (cursors.up.isDown) {
+        this.startGame();
+      }
     }
 
     render () {
@@ -30,7 +35,7 @@ export default class Menu extends Phaser.State {
         font: '42px silkscreennormal', fill: '#ffffff', align: 'center'
       });
       text.anchor.set(0.5);
-      text.setText("GET TO WORK! \n\nPress Click to play");
+      text.setText("GET TO WORK! \n\nPress Up to play");
     }
 
   startGame () {

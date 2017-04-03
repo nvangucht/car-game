@@ -29,7 +29,7 @@ export default class Player extends Phaser.Sprite {
     }
 
     updatePlayer(cursors) {
-        if (!this.game.global.paused) {
+        if (this.game.global.active) {
             this.body.velocity.x = 0;
             this.body.velocity.y = 0;
             this.game.global.distance += 1;
@@ -41,9 +41,8 @@ export default class Player extends Phaser.Sprite {
             }
 
             if (cursors.up.isDown) {
-                // this.road.tilePosition.y += 4;
-                this.body.velocity.y = -40;
-                this.game.global.distance += 1;
+                this.body.velocity.y = -50;
+                this.game.global.distance += 2;
             } else if (cursors.down.isDown) {
                 this.body.velocity.y += 200;
             }

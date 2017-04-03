@@ -3,7 +3,7 @@ export default class GameTimer {
         this.game = game;
         this.player = player;
         this.timer = this.game.time.create();
-        this.timerEvent = this.timer.add(Phaser.Timer.SECOND * 30, this.endTimer, this);
+        this.timerEvent = this.timer.add(Phaser.Timer.SECOND * this.game.global.duration, this.endTimer, this);
         this.timeText = "";
     }
 
@@ -15,15 +15,10 @@ export default class GameTimer {
     }
 
     endTimer() {
+        this.game.global.playerWon = true;
         this.game.global.themesong.stop();
-
-        if (this.game.global.distance > 2000) {
-          console.log("you win!");
-        } else {
-          console.log("You lose!");
-        }
         this.timer.stop();
-        this.player.destroy();
+        this.game.global.player.destroy();
         this.game.state.start('gameover');
     }
 
@@ -34,6 +29,8 @@ export default class GameTimer {
     }
 
     render() {
-        this.timerText.setText(this.formatTime(Math.round((this.timerEvent.delay - this.timer.ms) / 1000)));
+        if (this.game.global.active) {
+            this.timerText.setText(this.formatTime(Math.round((this.timerEvent.delay - this.timer.ms) / 1000)));
+        }
     }
 }

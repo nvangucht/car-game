@@ -12,6 +12,9 @@ export default class Road {
     }
 
     update () {
-    	this.road.tilePosition.y += 11;
+        let game = this.game;
+        if (game.global.active) {
+        	this.road.tilePosition.y += 15;
+        }
     }
 }

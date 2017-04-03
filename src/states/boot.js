@@ -52,7 +52,11 @@ export default class Boot extends Phaser.State {
         gameOverSong: gameOverSong,
         traffic: null,
         road: null,
-        distance: 0
+        distance: 0,
+        carGerationSpeed: .9,
+        carSpeed: 190,
+        playerWon: false,
+        duration: 60
     };
   }
 

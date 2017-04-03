@@ -1,10 +1,10 @@
 export default class Enemy extends Phaser.Sprite {
-    constructor(game, x, y, color, player, speed = 165) {
+    constructor(game, x, y, color, player, speed = 185) {
         super(game, x, y, color);
 
         this.player = player;
         this.scale.setTo(0.5, 0.5);
-        this.speed = speed;
+        this.speed = this.game.global.carSpeed;
         this.mass = 100;
         game.physics.arcade.enable(this);
 
@@ -18,9 +18,12 @@ export default class Enemy extends Phaser.Sprite {
     }
 
     update() {
-        this.game.physics.arcade.collide(this.player, this);
-        if (!this.game.global.paused) {
+        let game = this.game;
+        game.physics.arcade.collide(this.player, this);
+        if (game.global.active) {
             this.body.velocity.y = this.speed;
+        } else  {
+            this.body.velocity.y = 0;
         }
 
         if (this.body.y >= 800) {
