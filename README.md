@@ -1,3 +1,3 @@
 # car-game
 
-A fun little driving game fun for all ages. Go to the <a href-"#">releases</a> to get the latest version!
+A fun little driving game fun for all ages. Go to the releases tab to get the latest version!
