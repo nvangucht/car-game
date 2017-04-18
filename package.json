@@ -16,7 +16,7 @@
     "copy:phaser": "ncp node_modules/phaser/build/phaser.min.js build/phaser.min.js",
     "copy:electron-package": "ncp electron/package.json build/package.json",
     "copy:electron-main": "ncp electron/main.js build/main.js",
-    "package": "electron-packager build/ release",
+    "package": "electron-packager build/ GetToWork",
     "package:mac": "npm run copy:electron-package && npm run copy:electron-main && npm run package"
   },
   "keywords": [],

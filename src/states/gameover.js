@@ -6,14 +6,13 @@ class GamerOver extends Phaser.State {
   }
 
   create() {
+    let game = this.game;
     this.game.global.player.destroy();
     this.game.global.traffic.destroy();
     this.game.stage.backgroundColor = '#005493';
 
-    var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, '', {
-      font: '42px silkscreennormal', fill: '#ffffff', align: 'center'
-    });
-    text.anchor.set(0.5);
+    let screen = game.add.sprite(0, 0, "gameoverscreen");
+    screen.scale.setTo(0.5, 0.5);
 
     this.saveVarsToLocalStorage();
 

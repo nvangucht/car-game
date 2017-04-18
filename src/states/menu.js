@@ -12,31 +12,22 @@ export default class Menu extends Phaser.State {
   }
 
   create() {
-      this.game.stage.backgroundColor = '#005493';
+    let game = this.game;
+    this.game.stage.backgroundColor = '#005493';
 
-      var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, '', {
-        font: '42px silkscreennormal', fill: '#ffffff', align: 'center'
-      });
-      text.anchor.set(0.5);
+    let screen = game.add.sprite(20, 0, "titlescreen");
+    screen.scale.setTo(0.5, 0.5);
 
-      this.music = this.game.add.audio('menu_song');
-      this.music.play();
+    this.music = this.game.add.audio('menu_song');
+    this.music.play();
+  }
+
+  update () {
+    var cursors = this.game.input.keyboard.createCursorKeys();
+    if (cursors.up.isDown) {
+      this.startGame();
     }
-
-    update () {
-      var cursors = this.game.input.keyboard.createCursorKeys();
-      if (cursors.up.isDown) {
-        this.startGame();
-      }
-    }
-
-    render () {
-      var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, '', {
-        font: '42px silkscreennormal', fill: '#ffffff', align: 'center'
-      });
-      text.anchor.set(0.5);
-      text.setText("GET TO WORK! \n\nPress Up to play");
-    }
+  }
 
   startGame () {
     this.music.stop();
