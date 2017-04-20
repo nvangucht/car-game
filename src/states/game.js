@@ -1,7 +1,5 @@
 import Player from '../objects/Player';
 import Enemy from '../objects/Enemy';
-import SemiTruck from '../objects/SemiTruck';
-import Traffic from '../objects/Traffic';
 import Road from '../objects/Road';
 import GameTimer from '../helpers/GameTimer';
 
@@ -18,9 +16,6 @@ class Game extends Phaser.State {
     this.siren;
     this.crashSound;
     this.music;
-    this.makeway;
-    this.openLane;
-    this.makeway = false;
     this.gameTimer;
     this.coords = [ { x : 385, y : -300}, { x : 447, y : -300}, { x : 510, y: -300}, { x : 570, y : -300} ];
   }

@@ -3,37 +3,34 @@ class GamerOver extends Phaser.State {
   constructor() {
     super();
     this.music = null;
+    this.enterkey;
   }
 
   create() {
     let game = this.game;
     this.game.global.player.destroy();
     this.game.global.traffic.destroy();
-    this.game.stage.backgroundColor = '#005493';
+    this.game.stage.backgroundColor = '#0096FF';
 
     let screen = game.add.sprite(0, 0, "gameoverscreen");
     screen.scale.setTo(0.5, 0.5);
-
-    this.saveVarsToLocalStorage();
-
-    this.input.onDown.add(this.restartGame, this);
+    this.enterkey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
   }
 
   render () {
-    var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, 'Game Over', {
+    var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, '', {
       font: '42px silkscreennormal', fill: '#ffffff', align: 'center'
     });
     text.anchor.set(0.5);
 
+
     if (this.game.global.playerWon) {
-      text.setText("You did it! \n \n  Press Up to Restart");
+      text.setText("You did it! \n \n  Press Enter to Restart");
     } else {
-      text.setText("Game Over \n \n  Press Up to Restart");
+      let screen = this.game.add.sprite(0, 0, "gameoverscreen");
+      screen.scale.setTo(0.5, 0.5);
+      text.setText("Game Over \n \n  Press Enter to Restart");
     }
-
-  }
-
-  saveVarsToLocalStorage(){
 
   }
 
@@ -43,10 +40,9 @@ class GamerOver extends Phaser.State {
   }
 
   update() {
-     var cursors = this.game.input.keyboard.createCursorKeys();
-      if (cursors.up.isDown) {
-        this.restartGame();
-      }
+    if (this.enterkey.isDown) {
+      this.restartGame();
+    }
   }
 
   restartGame () {

@@ -21,11 +21,12 @@ export default class Player extends Phaser.Sprite {
     create () {
         this.anchor.setTo(0.5, 0.5);
         this.body.collideWorldBounds = true;
-        this.body.mass = 0.5;
+        this.body.mass = 0.1;
         this.brake = this.game.add.audio('brake');
         this.vroom = this.game.add.audio('vroom');
         this.brake.volume = 0.35;
         this.crashSound = this.game.add.audio('car_hit');
+        this.body.bounce = new Phaser.Point(0.1, 0.1);
     }
 
     updatePlayer(cursors) {

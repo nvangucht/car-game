@@ -1,10 +1,10 @@
-import TextHelper from '../helpers/TextHelper';
 
 export default class Menu extends Phaser.State {
 
   constructor() {
     super();
     this.music = null;
+    this.enterkey;
   }
 
   preload () {
@@ -13,7 +13,9 @@ export default class Menu extends Phaser.State {
 
   create() {
     let game = this.game;
-    this.game.stage.backgroundColor = '#005493';
+    this.game.stage.backgroundColor = '#0096FF';
+
+    this.enterkey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 
     let screen = game.add.sprite(20, 0, "titlescreen");
     screen.scale.setTo(0.5, 0.5);
@@ -23,8 +25,7 @@ export default class Menu extends Phaser.State {
   }
 
   update () {
-    var cursors = this.game.input.keyboard.createCursorKeys();
-    if (cursors.up.isDown) {
+    if (this.enterkey.isDown) {
       this.startGame();
     }
   }

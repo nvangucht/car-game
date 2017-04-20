@@ -22,8 +22,6 @@ export default class Boot extends Phaser.State {
     this.game.load.spritesheet('cop_car','./assets/images/cop_car.png');
     this.game.load.spritesheet('semi_truck','./assets/images/semi.png');
 
-    //obstacles
-    this.game.load.spritesheet('banana','./assets/images/banana.png');
     // audio
     this.game.load.audio('themesong', './assets/audio/themesong.ogg');
     this.game.load.audio('game_over', './assets/audio/game_over.ogg');
@@ -31,10 +29,8 @@ export default class Boot extends Phaser.State {
     this.game.load.audio('brake', './assets/audio/brake.ogg');
     this.game.load.audio('semi_honk_long', './assets/audio/semi_honk_long.ogg');
     this.game.load.audio('semi_honk_med', './assets/audio/semi_honk_med.ogg');
-    this.game.load.audio('spinout', './assets/audio/spinout.ogg');
     this.game.load.audio('car_hit', './assets/audio/car_hit.ogg');
     this.game.load.audio('cop_siren', './assets/audio/cop_siren.ogg');
-    this.game.load.audio('pot_hole_clunk', './assets/audio/pot_hole_clunk.ogg');
   }
 
   create() {
