@@ -12,9 +12,11 @@ class GamerOver extends Phaser.State {
     this.game.global.traffic.destroy();
     this.game.stage.backgroundColor = '#0096FF';
 
-    let screen = game.add.sprite(0, 0, "gameoverscreen");
-    screen.scale.setTo(0.5, 0.5);
     this.enterkey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+    if (this.game.global.playerWon) {
+      this.music = this.game.add.audio('menu_song');
+      this.music.play();
+    }
   }
 
   render () {
@@ -25,11 +27,11 @@ class GamerOver extends Phaser.State {
 
 
     if (this.game.global.playerWon) {
-      text.setText("You did it! \n \n  Press Enter to Restart");
-    } else {
-      let screen = this.game.add.sprite(0, 0, "gameoverscreen");
+      let screen = this.game.add.sprite(0, -10, "victoryscreen");
       screen.scale.setTo(0.5, 0.5);
-      text.setText("Game Over \n \n  Press Enter to Restart");
+    } else {
+      let screen = this.game.add.sprite(0, -10, "gameoverscreen");
+      screen.scale.setTo(0.5, 0.5);
     }
 
   }

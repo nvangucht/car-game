@@ -17,7 +17,7 @@ export default class Menu extends Phaser.State {
 
     this.enterkey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 
-    let screen = game.add.sprite(20, 0, "titlescreen");
+    let screen = game.add.sprite(20, -10, "titlescreen");
     screen.scale.setTo(0.5, 0.5);
 
     this.music = this.game.add.audio('menu_song');
