@@ -8,37 +8,28 @@ class GamerOver extends Phaser.State {
 
   create() {
     let game = this.game;
-    this.game.global.player.destroy();
-    this.game.global.traffic.destroy();
-    this.game.stage.backgroundColor = '#0096FF';
+    let screenType = game.global.playerWon ? "victoryscreen" : "gameoverscreen";
+
+    game.global.player.destroy();
+    game.global.traffic.destroy();
+    game.stage.backgroundColor = '#0096FF';
 
     this.enterkey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-    if (this.game.global.playerWon) {
-      this.music = this.game.add.audio('menu_song');
+
+    if (game.global.playerWon) {
+      this.music = game.add.audio('menu_song');
       this.music.play();
     }
+
+    game.add.sprite(0, -10, screenType).scale.setTo(0.5, 0.5);
   }
 
-  render () {
-    var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, '', {
-      font: '42px silkscreennormal', fill: '#ffffff', align: 'center'
-    });
-    text.anchor.set(0.5);
+  resetGlobalVariables() {
+    let game = this.game;
 
-
-    if (this.game.global.playerWon) {
-      let screen = this.game.add.sprite(0, -10, "victoryscreen");
-      screen.scale.setTo(0.5, 0.5);
-    } else {
-      let screen = this.game.add.sprite(0, -10, "gameoverscreen");
-      screen.scale.setTo(0.5, 0.5);
-    }
-
-  }
-
-  resetGlobalVariables(){
-    this.game.global.distance = 0;
-    this.game.global.active = true;
+    game.global.playerWon = false;
+    game.global.distance = 0;
+    game.global.active = true;
   }
 
   update() {

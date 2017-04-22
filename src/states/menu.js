@@ -13,15 +13,13 @@ export default class Menu extends Phaser.State {
 
   create() {
     let game = this.game;
-    this.game.stage.backgroundColor = '#0096FF';
+    game.stage.backgroundColor = '#0096FF';
+    game.add.sprite(20, -10, "titlescreen").scale.setTo(0.5, 0.5);
+
+    this.music = game.add.audio('menu_song');
+    this.music.play();
 
     this.enterkey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-
-    let screen = game.add.sprite(20, -10, "titlescreen");
-    screen.scale.setTo(0.5, 0.5);
-
-    this.music = this.game.add.audio('menu_song');
-    this.music.play();
   }
 
   update () {

@@ -21,40 +21,42 @@ class Game extends Phaser.State {
   }
 
   create() {
-    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    let game = this.game;
+    let gameTimer = this.gameTimer;
 
-    this.game.global.themesong.loopFull();
+    game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.semiHonkLong = this.game.add.audio('semi_honk_long');
+    game.global.themesong.loopFull();
+
+    this.semiHonkLong = game.add.audio('semi_honk_long');
     this.semiHonkLong.volume = 1;
 
-    this.siren = this.game.add.audio('cop_siren');
-
+    this.siren = game.add.audio('cop_siren');
     this.siren.volume = .85;
 
-    this.crashSound = this.game.add.audio('car_hit');
+    this.crashSound = game.add.audio('car_hit');
+    this.cursors = game.input.keyboard.createCursorKeys();
 
-    this.cursors = this.game.input.keyboard.createCursorKeys();
+    game.global.road = new Road(game);
+    game.global.road.create();
 
-    this.game.global.road = new Road(this.game);
-    this.game.global.road.create();
-
-    this.game.global.player = new Player(this.game, this.road, 510, 300);
+    game.global.player = new Player(game, this.road, 510, 300);
 
     this.createTraffic();
 
-    this.gameTimer = new GameTimer(this.game, this.player);
+    this.gameTimer = new GameTimer(game, this.player);
     this.gameTimer.start();
   }
 
   createTraffic() {
-    this.game.global.traffic = this.game.add.group();
+    let game = this.game;
 
-    this.game.time.events.repeat(Phaser.Timer.SECOND * this.game.global.carGerationSpeed, Infinity, this.createCar, this);
+    game.global.traffic = game.add.group();
+    game.time.events.repeat(Phaser.Timer.SECOND * game.global.carGerationSpeed, Infinity, this.createCar, this);
   }
 
   update() {
-    var game = this.game,
+    let game = this.game,
         cursors = this.cursors,
         player = this.game.global.player,
         traffic = this.game.global.traffic;
@@ -80,45 +82,39 @@ class Game extends Phaser.State {
       });
 
     } else {
-      game.physics.arcade.collide(player, traffic, function (player) {});
+      game.physics.arcade.collide(player, traffic, () => {});
     }
     game.physics.arcade.collide(traffic);
   }
 
   createCar () {
+    let game = this.game;
     let colors = [ "orng_car", "turq_car", "purple_car", "black_car", "green_car", "blue_car" ];
-    let coords = this.coords,
-        randomColor = Math.floor(Math.random() * colors.length),
-        randomCoord = Math.floor(Math.random() * 4),
-        color,
-        location = coords[randomCoord],
-        traffic = this.game.global.traffic;
+    let coords = this.coords;
+    let randomColor = Math.floor(Math.random() * colors.length);
+    let randomCoord = Math.floor(Math.random() * 4);
+    let color;
+    let location = coords[randomCoord];
+    let traffic = this.game.global.traffic;
 
     let randomRange = Math.floor(Math.random() * 100);
 
     if (randomRange <= 4) {
-        color = "cop_car";
-        this.siren.play();
-        if (this.game.global.active && this.game.global.player.body.y <= 155) {
-          var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, 'SPEEDING! \n BUSTED!', {
-            font: '42px Arial', fill: '#ffffff', align: 'center'
-          });
-          text.anchor.set(0.5);
-          this.game.world.bringToTop(text);
-        }
+      color = "cop_car";
+      this.siren.play();
     } else if (randomRange > 5 && randomRange <= 10) {
       color = "semi_truck";
       this.semiHonkLong.play();
     } else {
-        color = colors[randomColor];
+      color = colors[randomColor];
     }
 
-    if (this.game.global.distance > 10000) {
-      traffic.add(new Enemy(this.game, location.x, location.y, color, this.player, 175));
-    } else if (this.game.global.distance > 3000) {
-       traffic.add(new Enemy(this.game, location.x, location.y, color, this.player, 180));
+    if (game.global.distance > 10000) {
+      traffic.add(new Enemy(game, location.x, location.y, color, this.player, 175));
+    } else if (game.global.distance > 3000) {
+      traffic.add(new Enemy(game, location.x, location.y, color, this.player, 180));
      } else {
-        traffic.add(new Enemy(this.game, location.x, location.y, color, this.player));
+      traffic.add(new Enemy(game, location.x, location.y, color, this.player));
     }
   }
 
